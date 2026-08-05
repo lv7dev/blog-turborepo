@@ -52,6 +52,13 @@ type Like {
   createdAt: DateTime!
 }
 
+type Auth {
+  id: Float!
+  name: String!
+  avatar: String
+  accessToken: String!
+}
+
 type Query {
   posts: [Post!]!
   comment(id: Int!): CommentEntity!
@@ -70,7 +77,7 @@ type Mutation {
   createLike(createLikeInput: CreateLikeInput!): Like!
   updateLike(updateLikeInput: UpdateLikeInput!): Like!
   removeLike(id: Int!): Like!
-  signIn(signInInput: SignInInput!): String!
+  signIn(signInInput: SignInInput!): Auth!
 }
 
 input CreateUserInput {

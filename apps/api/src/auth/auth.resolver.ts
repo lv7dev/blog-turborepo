@@ -7,10 +7,14 @@ import { SignInInput } from './dto/signin.input';
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Mutation(() => String)
+  @Mutation(() => Auth)
   async signIn(@Args('signInInput') signInInput: SignInInput) {
     const user = await this.authService.validateLocalUser(signInInput);
 
-    return 'Succesfully signed in';
+    return await this.authService.login({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    });
   }
 }
