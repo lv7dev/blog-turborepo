@@ -5,13 +5,13 @@ import { CommentEntity } from '../../comment/entities/comment.entity';
 @ObjectType()
 export class User {
   @Field(() => Int)
-  id: number;
+  id!: number;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  email: string;
+  email!: string;
 
   @Field({ nullable: true })
   bio?: string;

@@ -54,7 +54,6 @@ type Like {
 
 type Query {
   posts: [Post!]!
-  user(id: Int!): User!
   comment(id: Int!): CommentEntity!
   tag(id: Int!): Tag!
   like(id: Int!): Like!
@@ -62,8 +61,6 @@ type Query {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
   createComment(createCommentInput: CreateCommentInput!): CommentEntity!
   updateComment(updateCommentInput: UpdateCommentInput!): CommentEntity!
   removeComment(id: Int!): CommentEntity!
@@ -73,17 +70,15 @@ type Mutation {
   createLike(createLikeInput: CreateLikeInput!): Like!
   updateLike(updateLikeInput: UpdateLikeInput!): Like!
   removeLike(id: Int!): Like!
+  signIn(signInInput: SignInInput!): String!
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  name: String!
+  password: String!
+  email: String!
+  bio: String
+  avatar: String
 }
 
 input CreateCommentInput {
@@ -117,4 +112,9 @@ input UpdateLikeInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
 }
