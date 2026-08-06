@@ -3,7 +3,7 @@ import ImageHero from "../public/hero.png";
 
 const Hero = () => {
   return (
-    <div className="bg-linear-to-br from-sky-500 to-indigo-500 text-white pt-24 pb-40">
+    <div className="bg-linear-to-br from-sky-500 to-indigo-500 text-white pt-24">
       <div className="container justify-center mx-auto flex flex-col md:flex-row items-center flex-wrap px-3">
         {/* Left col */}
         <div className="flex flex-col w-full justify-center items-start md:w-2/5 text-center md:text-left">
@@ -29,6 +29,7 @@ const Hero = () => {
             className="w-full md:w-3/5  "
             width={500}
             height={300}
+            loading="eager"
           />
         </div>
       </div>

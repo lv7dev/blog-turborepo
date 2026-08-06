@@ -60,7 +60,8 @@ type Auth {
 }
 
 type Query {
-  posts: [Post!]!
+  posts(skip: Float, take: Float): [Post!]!
+  postCount: Int!
   comment(id: Int!): CommentEntity!
   tag(id: Int!): Tag!
   like(id: Int!): Like!
