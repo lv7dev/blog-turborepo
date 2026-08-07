@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthJwtPayload } from './types/auth-jwtPayload';
 import { User } from 'src/user/entities/user.entity';
 import { Auth } from './entities/auth.entity';
+import { CreateUserInput } from 'src/user/dto/create-user.input';
 
 @Injectable()
 export class AuthService {
@@ -67,5 +68,29 @@ export class AuthService {
     };
 
     return currentUser;
+  }
+
+  async validateGoogleUser(googleUser: CreateUserInput) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: googleUser.email,
+      },
+    });
+
+    if (user) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...authUser } = user;
+      return authUser;
+    }
+
+    const dbUser = await this.prisma.user.create({
+      data: {
+        ...googleUser,
+      },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...authUser } = dbUser;
+    return authUser;
   }
 }
