@@ -4,7 +4,7 @@ import NoImage from "@/public/no-image.png";
 import SanitizedContent from "./_components/SanitizedContent";
 import Comments from "./_components/Comments";
 import { getSession } from "@/lib/session";
-// import Like from "./_components/like";
+import Like from "./_components/Like";
 
 type Props = {
   params: {
@@ -37,7 +37,7 @@ const PostPage = async ({ params }: Props) => {
 
       <SanitizedContent content={post.content} />
 
-      {/* <Like postId={post.id} user={session?.user} /> */}
+      <Like postId={post.id} user={session?.user} />
       {/* Todo: Put the Post Comments Here */}
       <Comments user={session?.user} postId={post.id} />
     </main>

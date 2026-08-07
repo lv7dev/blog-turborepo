@@ -45,13 +45,6 @@ type Post {
   comments: [CommentEntity!]!
 }
 
-type Like {
-  id: Int!
-  user: User!
-  post: Post!
-  createdAt: DateTime!
-}
-
 type Auth {
   id: Float!
   name: String!
@@ -66,7 +59,8 @@ type Query {
   getPostComments(postId: Int!, take: Int = 12, skip: Int = 0): [CommentEntity!]!
   postCommentCount(postId: Int!): Int!
   tag(id: Int!): Tag!
-  like(id: Int!): Like!
+  postLikesCount(postId: Int!): Int!
+  userLikedPost(postId: Int!): Boolean!
 }
 
 type Mutation {
@@ -75,9 +69,8 @@ type Mutation {
   createTag(createTagInput: CreateTagInput!): Tag!
   updateTag(updateTagInput: UpdateTagInput!): Tag!
   removeTag(id: Int!): Tag!
-  createLike(createLikeInput: CreateLikeInput!): Like!
-  updateLike(updateLikeInput: UpdateLikeInput!): Like!
-  removeLike(id: Int!): Like!
+  likePost(postId: Int!): Boolean!
+  unlikePost(postId: Int!): Boolean!
   signIn(signInInput: SignInInput!): Auth!
 }
 
@@ -100,17 +93,6 @@ input CreateTagInput {
 }
 
 input UpdateTagInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input CreateLikeInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateLikeInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
