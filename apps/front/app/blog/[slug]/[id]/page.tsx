@@ -1,10 +1,9 @@
 import { fetchPostById } from "@/lib/actions/post";
 import Image from "next/image";
 import NoImage from "@/public/no-image.png";
-// import DOMPurify from "dompurify";
 import SanitizedContent from "./_components/SanitizedContent";
-// import Comments from "./_components/comments";
-// import { getSession } from "@/lib/session";
+import Comments from "./_components/Comments";
+import { getSession } from "@/lib/session";
 // import Like from "./_components/like";
 
 type Props = {
@@ -16,7 +15,7 @@ type Props = {
 const PostPage = async ({ params }: Props) => {
   const postId = (await params).id;
   const post = await fetchPostById(+postId);
-  //   const session = await getSession();
+  const session = await getSession();
 
   return (
     <main className="container mx-auto px-4 py-8 mt-16">
@@ -40,7 +39,7 @@ const PostPage = async ({ params }: Props) => {
 
       {/* <Like postId={post.id} user={session?.user} /> */}
       {/* Todo: Put the Post Comments Here */}
-      {/* <Comments user={session?.user} postId={post.id} /> */}
+      <Comments user={session?.user} postId={post.id} />
     </main>
   );
 };

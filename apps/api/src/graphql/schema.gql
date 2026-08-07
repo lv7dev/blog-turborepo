@@ -63,7 +63,8 @@ type Query {
   posts(skip: Float, take: Float): [Post!]!
   postCount: Int!
   getPostById(id: Int!): Post!
-  comment(id: Int!): CommentEntity!
+  getPostComments(postId: Int!, take: Int = 12, skip: Int = 0): [CommentEntity!]!
+  postCommentCount(postId: Int!): Int!
   tag(id: Int!): Tag!
   like(id: Int!): Like!
 }
@@ -71,8 +72,6 @@ type Query {
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   createComment(createCommentInput: CreateCommentInput!): CommentEntity!
-  updateComment(updateCommentInput: UpdateCommentInput!): CommentEntity!
-  removeComment(id: Int!): CommentEntity!
   createTag(createTagInput: CreateTagInput!): Tag!
   updateTag(updateTagInput: UpdateTagInput!): Tag!
   removeTag(id: Int!): Tag!
@@ -91,14 +90,8 @@ input CreateUserInput {
 }
 
 input CreateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  postId: Int!
+  content: String!
 }
 
 input CreateTagInput {
