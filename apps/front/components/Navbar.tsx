@@ -1,13 +1,13 @@
-// import { getSession } from "@/lib/session";
+import { getSession } from "@/lib/session";
 import Link from "next/link";
 import { PropsWithChildren } from "react";
-// import SignInPanel from "./signInPanel";
-// import Profile from "./Profile";
+import SignInPanel from "./SignInPanel";
+import Profile from "./Profile";
 
 type Props = PropsWithChildren;
 
 const Navbar = async (props: Props) => {
-  //   const session = await getSession();
+  const session = await getSession();
 
   return (
     <>
@@ -22,11 +22,11 @@ const Navbar = async (props: Props) => {
         <Link href="#contact" className="">
           Contact
         </Link>
-        {/* {session && session.user ? (
+        {session && session.user ? (
           <Profile user={session.user} />
         ) : (
           <SignInPanel />
-        )} */}
+        )}
       </div>
     </>
   );
