@@ -4,12 +4,21 @@ import { Tag } from 'src/tag/entities/tag.entity';
 import { User } from 'src/user/entities/user.entity';
 
 @ObjectType()
+export class Count {
+  @Field(() => Int)
+  likes!: number;
+
+  @Field(() => Int)
+  comments!: number;
+}
+
+@ObjectType()
 export class Post {
   @Field(() => Int)
-  id: number;
+  id!: number;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field({ nullable: true })
   slug?: string;
@@ -18,23 +27,26 @@ export class Post {
   thumbnail?: string;
 
   @Field()
-  content: string;
+  content!: string;
 
   @Field(() => Boolean)
-  published: boolean;
+  published!: boolean;
 
   @Field()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Field(() => User)
-  author: User;
+  author!: User;
 
   @Field(() => [Tag])
-  tags: Tag[];
+  tags!: Tag[];
 
   @Field(() => [CommentEntity])
-  comments: CommentEntity[];
+  comments!: CommentEntity[];
+
+  @Field(() => Count)
+  _count!: Count;
 }

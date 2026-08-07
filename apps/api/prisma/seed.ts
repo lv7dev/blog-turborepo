@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { faker } from '@faker-js/faker/locale/zu_ZA';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { hash } from 'argon2';
 
 // Initialize the adapter according to your driver's requirements
 const adapter = new PrismaBetterSqlite3({
@@ -20,11 +21,14 @@ function generateSlug(title: string): string {
 }
 
 async function main() {
+  const defaultPassword = await hash('123');
+
   const users = Array.from({ length: 10 }).map(() => ({
     name: faker.person.fullName(),
     email: faker.internet.email(),
     bio: faker.lorem.paragraph(),
     avatar: faker.image.avatar(),
+    password: defaultPassword,
   }));
 
   await prisma.user.createMany({
