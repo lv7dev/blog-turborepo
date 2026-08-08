@@ -1,73 +1,73 @@
 # Blog Turborepo
 
-Blog Turborepo là dự án blog full-stack được tổ chức theo mô hình monorepo. Dự án gồm frontend Next.js trong `apps/front` và backend NestJS GraphQL trong `apps/api`, được điều phối bằng Turborepo.
+Blog Turborepo is a full-stack blog project organized as a monorepo. It contains a Next.js frontend in `apps/front` and a NestJS GraphQL backend in `apps/api`, orchestrated with Turborepo.
 
-## Công nghệ sử dụng
+## Tech Stack
 
 ### Monorepo
 
-- Turborepo để chạy, build và lint nhiều workspace.
-- npm workspaces với cấu trúc `apps/*`.
-- TypeScript cho cả frontend và backend.
+- Turborepo for running, building, and linting multiple workspaces.
+- npm workspaces with the `apps/*` structure.
+- TypeScript across both frontend and backend.
 
 ### Frontend
 
-- Next.js 16 với App Router.
-- React 19 và React DOM 19.
-- Tailwind CSS 4 cho giao diện.
-- shadcn/ui, Base UI, Heroicons và Lucide React cho component và icon.
-- TanStack React Query cho quản lý dữ liệu phía client.
-- Zod để validate form.
-- jose để tạo và xác thực session JWT trong cookie.
-- Supabase SSR và Supabase Storage để upload ảnh thumbnail.
+- Next.js 16 with the App Router.
+- React 19 and React DOM 19.
+- Tailwind CSS 4 for styling.
+- shadcn/ui, Base UI, Heroicons, and Lucide React for components and icons.
+- TanStack React Query for client-side data handling.
+- Zod for form validation.
+- jose for creating and verifying JWT sessions in cookies.
+- Supabase SSR and Supabase Storage for thumbnail image uploads.
 
 ### Backend
 
 - NestJS 11.
-- GraphQL với Apollo Server và `@nestjs/graphql`.
+- GraphQL with Apollo Server and `@nestjs/graphql`.
 - Prisma ORM 7.
-- SQLite cho cơ sở dữ liệu local.
-- Passport JWT và Passport Google OAuth2 cho xác thực.
-- Argon2 để kiểm tra mật khẩu.
-- Jest và Supertest cho unit/e2e testing.
+- SQLite for the local database.
+- Passport JWT and Passport Google OAuth2 for authentication.
+- Argon2 for password verification.
+- Jest and Supertest for unit and e2e testing.
 
-## Tính năng chính
+## Main Features
 
-- Xem danh sách bài viết public với phân trang.
-- Xem chi tiết bài viết theo slug/id.
-- Đăng ký và đăng nhập bằng email/mật khẩu.
-- Đăng nhập bằng Google OAuth.
-- Quản lý session bằng HTTP-only cookie.
-- Tạo, cập nhật và xóa bài viết của người dùng.
-- Upload thumbnail bài viết lên Supabase Storage.
-- Gắn tag cho bài viết.
-- Bình luận trên bài viết.
-- Like và unlike bài viết, kèm đếm lượt thích.
-- Khu vực quản lý bài viết riêng cho người dùng đã đăng nhập.
-- API GraphQL cho các domain: user, auth, post, tag, comment và like.
+- Public blog post listing with pagination.
+- Blog post detail pages by slug/id.
+- Email and password sign-up/sign-in.
+- Google OAuth sign-in.
+- Session management with HTTP-only cookies.
+- Create, update, and delete user posts.
+- Upload post thumbnails to Supabase Storage.
+- Add tags to posts.
+- Comment on posts.
+- Like and unlike posts, including like counts.
+- User-only post management area.
+- GraphQL API for user, auth, post, tag, comment, and like domains.
 
-## Cấu trúc thư mục
+## Project Structure
 
 ```text
 .
-├── apps
-│   ├── api      # Backend NestJS, GraphQL, Prisma
-│   └── front    # Frontend Next.js
-├── package.json # Scripts và npm workspaces
-├── turbo.json   # Cấu hình Turborepo
-└── README.md
+|-- apps
+|   |-- api      # NestJS backend, GraphQL, Prisma
+|   `-- front    # Next.js frontend
+|-- package.json # Scripts and npm workspaces
+|-- turbo.json   # Turborepo configuration
+`-- README.md
 ```
 
-## Yêu cầu môi trường
+## Requirements
 
-- Node.js phiên bản phù hợp với Next.js/NestJS hiện tại.
+- Node.js version compatible with the current Next.js/NestJS setup.
 - npm.
-- Tài khoản Supabase nếu muốn dùng upload ảnh.
-- Google OAuth credentials nếu muốn dùng đăng nhập Google.
+- A Supabase account if you want to use image uploads.
+- Google OAuth credentials if you want to use Google sign-in.
 
-## Biến môi trường
+## Environment Variables
 
-Backend `apps/api` cần các biến:
+The backend in `apps/api` needs:
 
 ```env
 DATABASE_URL="file:./dev.db"
@@ -79,7 +79,7 @@ GOOGLE_CALLBACK_URL="http://localhost:8000/auth/google/callback"
 PORT=8000
 ```
 
-Frontend `apps/front` cần các biến:
+The frontend in `apps/front` needs:
 
 ```env
 SESSION_SECRET_KEY="your-session-secret"
@@ -87,28 +87,28 @@ NEXT_PUBLIC_SUPABASE_URL="your-supabase-url"
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="your-supabase-publishable-key"
 ```
 
-## Cài đặt
+## Installation
 
-Chạy ở thư mục root:
+Run from the repository root:
 
 ```bash
 npm install
 ```
 
-## Chạy dự án
+## Running the Project
 
-Chạy cả frontend và backend qua Turborepo:
+Run both frontend and backend through Turborepo:
 
 ```bash
 npm run dev
 ```
 
-Mặc định:
+By default:
 
-- Frontend chạy ở `http://localhost:3000`.
-- Backend chạy ở `http://localhost:8000`.
+- Frontend runs at `http://localhost:3000`.
+- Backend runs at `http://localhost:8000`.
 
-Có thể chạy từng app riêng:
+You can also run each app separately:
 
 ```bash
 npm run dev -w front
@@ -117,37 +117,37 @@ npm run dev -w api
 
 ## Database
 
-Prisma schema nằm tại `apps/api/prisma/schema.prisma`. Database local mặc định dùng SQLite.
+The Prisma schema is located at `apps/api/prisma/schema.prisma`. The local database uses SQLite by default.
 
-Seed dữ liệu mẫu:
+Seed sample data:
 
 ```bash
 npm run db:seed -w api
 ```
 
-## Build và kiểm tra
+## Build and Checks
 
-Build toàn bộ dự án:
+Build the whole project:
 
 ```bash
 npm run build
 ```
 
-Lint toàn bộ monorepo:
+Lint the monorepo:
 
 ```bash
 npm run lint
 ```
 
-Chạy test backend:
+Run backend tests:
 
 ```bash
 npm run test -w api
 npm run test:e2e -w api
 ```
 
-## Ghi chú phát triển
+## Development Notes
 
-- Frontend gọi backend GraphQL qua `BACKEND_URL` hiện được đặt là `http://localhost:8000` trong `apps/front/lib/constants.ts`.
-- Backend tự sinh GraphQL schema tại `apps/api/src/graphql/schema.gql`.
-- Supabase Storage bucket đang được dùng tên là `images`.
+- The frontend calls the GraphQL backend through `BACKEND_URL`, currently set to `http://localhost:8000` in `apps/front/lib/constants.ts`.
+- The backend generates the GraphQL schema at `apps/api/src/graphql/schema.gql`.
+- The Supabase Storage bucket currently used by the upload helper is named `images`.
