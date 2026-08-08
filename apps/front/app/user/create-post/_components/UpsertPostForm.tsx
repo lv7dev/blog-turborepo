@@ -16,6 +16,10 @@ type Props = {
 
 const UpsertPostForm = ({ state, formAction }: Props) => {
   const [imageUrl, setImageUrl] = useState("");
+  const [title, setTitle] = useState(state?.data?.title ?? "");
+  const [content, setContent] = useState(state?.data?.content ?? "");
+  const [tags, setTags] = useState(state?.data?.tags ?? "");
+  const [published, setPublished] = useState(state?.data?.published === "on");
 
   useEffect(() => {
     if (state?.message)
@@ -30,13 +34,14 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
       action={formAction}
       className="flex flex-col gap-5 [&>div>label]:text-slate-500 [&>div>input]:transition [&>div>textarea]:transition"
     >
-      <input hidden name="postId" defaultValue={state?.data?.postId} />
+      <input hidden name="postId" defaultValue={state?.data?.postId ?? ""} />
       <div>
         <Label htmlFor="title">Title</Label>
         <Input
           name="title"
           placeholder="Enter The Title of Your Post"
-          defaultValue={state?.data?.title}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </div>
       {!!state?.errors?.title && (
@@ -49,7 +54,8 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
           name="content"
           placeholder="Write Your Post Content Here"
           rows={6}
-          defaultValue={state?.data?.content}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
         />
       </div>
       {!!state?.errors?.content && (
@@ -62,8 +68,9 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
           name="thumbnail"
           accept="image/*"
           onChange={(e) => {
-            if (e.target.files)
-              setImageUrl(URL.createObjectURL(e.target.files[0]));
+            const file = e.target.files?.[0];
+
+            if (file) setImageUrl(URL.createObjectURL(file));
           }}
         />
         {!!state?.errors?.thumbnail && (
@@ -83,7 +90,8 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
         <Input
           name="tags"
           placeholder="Enter tags (comma-separated)"
-          defaultValue={state?.data?.tags}
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
         />
       </div>
       {!!state?.errors?.tags && (
@@ -94,12 +102,13 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
           className="mx-2 w-4 h-4"
           type="checkbox"
           name="published"
-          defaultChecked={state?.data?.published === "on" ? true : false}
+          checked={published}
+          onChange={(e) => setPublished(e.target.checked)}
         />
         <Label htmlFor="published">Published Now</Label>
       </div>
-      {!!state?.errors?.isPublished && (
-        <p className="text-red-500 animate-shake">{state.errors.isPublished}</p>
+      {!!state?.errors?.published && (
+        <p className="text-red-500 animate-shake">{state.errors.published}</p>
       )}
 
       <SubmitButton>Save</SubmitButton>

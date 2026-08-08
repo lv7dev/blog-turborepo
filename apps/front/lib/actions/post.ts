@@ -14,7 +14,8 @@ import { transformTakeSkip } from "../helpers";
 import { Post } from "../types/modelTypes";
 import { PostFormState } from "../types/formState";
 import { PostFormSchema } from "../zodSchemas/postFormSchema";
-import { uploadThumbnail } from "../upload";
+import { uploadImage } from "../upload";
+import { getSession } from "../session";
 
 export const fetchPosts = async ({
   page,
@@ -58,6 +59,8 @@ export async function saveNewPost(
   state: PostFormState,
   formData: FormData,
 ): Promise<PostFormState> {
+  const session = await getSession();
+
   const validatedFields = PostFormSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
@@ -67,17 +70,31 @@ export async function saveNewPost(
       data: Object.fromEntries(formData.entries()),
       errors: validatedFields.error.flatten().fieldErrors,
     };
+
   let thumbnailUrl = "";
   // Todo:Upload Thumbnail to supabase
-  if (validatedFields.data.thumbnail)
-    thumbnailUrl = await uploadThumbnail(validatedFields.data.thumbnail);
+  if (validatedFields.data.thumbnail && validatedFields.data.thumbnail.size > 0) {
+    const { url } = await uploadImage(
+      validatedFields.data.thumbnail,
+      `users/${session?.user.id}`,
+    );
+
+    thumbnailUrl = url;
+  }
 
   // Todo: call garphql api
 
+  const createPostInput = {
+    title: validatedFields.data.title,
+    content: validatedFields.data.content,
+    tags: validatedFields.data.tags,
+    published: validatedFields.data.published,
+    thumbnail: thumbnailUrl,
+  };
+
   const data = await authFetchGraphQL(print(CREATE_POST_MUTATION), {
     input: {
-      ...validatedFields.data,
-      thumbnail: thumbnailUrl,
+      ...createPostInput,
     },
   });
 
@@ -88,45 +105,54 @@ export async function saveNewPost(
   };
 }
 
-// export async function updatePost(
-//   state: PostFormState,
-//   formData: FormData
-// ): Promise<PostFormState> {
-//   const validatedFields = PostFormSchema.safeParse(
-//     Object.fromEntries(formData.entries())
-//   );
+export async function updatePost(
+  state: PostFormState,
+  formData: FormData,
+): Promise<PostFormState> {
+  const session = await getSession();
 
-//   if (!validatedFields.success)
-//     return {
-//       data: Object.fromEntries(formData.entries()),
-//       errors: validatedFields.error.flatten().fieldErrors,
-//     };
+  const validatedFields = PostFormSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
 
-//   // Todo: check if thumbnail has been changed
-//   const { thumbnail, ...inputs } = validatedFields.data;
+  if (!validatedFields.success)
+    return {
+      data: Object.fromEntries(formData.entries()),
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
 
-//   let thumbnailUrl = "";
-//   // Todo:Upload Thumbnail to supabase
-//   if (thumbnail) thumbnailUrl = await uploadThumbnail(thumbnail);
+  // Todo: check if thumbnail has been changed
+  const { thumbnail, ...inputs } = validatedFields.data;
 
-//   const data = await authFetchGraphQL(print(UPDATE_POST_MUTATION), {
-//     input: {
-//       ...inputs,
-//       ...(thumbnailUrl && { thumbnail: thumbnailUrl }),
-//     },
-//   });
+  let thumbnailUrl = "";
+  // Todo:Upload Thumbnail to supabase
+  if (thumbnail && thumbnail.size > 0) {
+    const { url } = await uploadImage(
+      thumbnail,
+      `users/${session?.user.id}`,
+    );
 
-//   if (data) return { message: "Success! The Post Updated", ok: true };
-//   return {
-//     message: "Oops, Something Went Wrong",
-//     data: Object.fromEntries(formData.entries()),
-//   };
-// }
+    thumbnailUrl = url;
+  }
 
-// export async function deletePost(postId: number) {
-//   const data = await authFetchGraphQL(print(DELETE_POST_MUTATION), {
-//     postId,
-//   });
+  const data = await authFetchGraphQL(print(UPDATE_POST_MUTATION), {
+    input: {
+      ...inputs,
+      ...(thumbnailUrl && { thumbnail: thumbnailUrl }),
+    },
+  });
 
-//   return data.deletePost;
-// }
+  if (data) return { message: "Success! The Post Updated", ok: true };
+  return {
+    message: "Oops, Something Went Wrong",
+    data: Object.fromEntries(formData.entries()),
+  };
+}
+
+export async function deletePost(postId: number) {
+  const data = await authFetchGraphQL(print(DELETE_POST_MUTATION), {
+    postId,
+  });
+
+  return data.deletePost;
+}
